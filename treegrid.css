@@ -1,0 +1,48 @@
+table {
+  width: 100%;
+  white-space: nowrap;
+}
+
+th {
+  text-align: left;
+  background-color: #eee;
+}
+
+/* Extra space between columns for readability */
+th, td {
+  padding-right: 2ch;
+}
+
+#treegrid :focus {
+  background-color: hsl(240, 60%, 30%);
+  color: white;
+  outline: 0;
+}
+
+/* Hide collapsed rows */
+tr[aria-hidden="true"] { display: none; }
+
+/* Indents */
+tr[aria-level="2"] > td:first-child {
+  padding-left: 2.5ch;
+}
+tr[aria-level="3"] > td:first-child {
+  padding-left: 5ch;
+}
+tr[aria-level="4"] > td:first-child {
+  padding-left: 7.5ch;
+}
+
+/* Collapse/expand icons */
+tr > td:first-child::before {
+  font-family: monospace;
+  content: " ";
+  display: inline-block;
+  width: 2ch;
+}
+tr[aria-expanded="false"] > td:first-child::before {
+  content: "\25BA";
+}
+tr[aria-expanded="true"] > td:first-child::before {
+  content: "\25BC";
+}
