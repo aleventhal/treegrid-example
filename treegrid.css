@@ -1,48 +1,63 @@
-table {
+#treegrid {
   width: 100%;
   white-space: nowrap;
+  border-collapse: collapse;
 }
 
-th {
+#treegrid th {
   text-align: left;
   background-color: #eee;
 }
 
 /* Extra space between columns for readability */
-th, td {
+#treegrid th, #treegrid td {
   padding-right: 2ch;
+  padding-bottom: 3px;
 }
 
 #treegrid :focus {
   background-color: hsl(240, 60%, 30%);
   color: white;
+  fill: white; /* For triangle color */
   outline: 0;
 }
 
 /* Hide collapsed rows */
-tr[aria-hidden="true"] { display: none; }
+#treegrid tr[aria-hidden="true"] {
+  display: none;
+}
 
 /* Indents */
-tr[aria-level="2"] > td:first-child {
+#treegrid tr[aria-level="2"] > td:first-child {
   padding-left: 2.5ch;
 }
-tr[aria-level="3"] > td:first-child {
+#treegrid tr[aria-level="3"] > td:first-child {
   padding-left: 5ch;
 }
-tr[aria-level="4"] > td:first-child {
+#treegrid tr[aria-level="4"] > td:first-child {
   padding-left: 7.5ch;
 }
 
 /* Collapse/expand icons */
-tr > td:first-child::before {
+#treegrid tr > td:first-child::before {
   font-family: monospace;
   content: " ";
   display: inline-block;
   width: 2ch;
+  height: 11px;
+  transition: transform .3s;
+  transform-origin: 5px 5px;
 }
-tr[aria-expanded="false"] > td:first-child::before {
-  content: "\25BA";
+
+#treegrid tr[aria-expanded] > td:first-child::before {
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12'><polygon points='2,0 2,10 10,5'></polygon></svg>") no-repeat;
 }
-tr[aria-expanded="true"] > td:first-child::before {
-  content: "\25BC";
+
+#treegrid tr[aria-expanded]:focus > td:first-child::before,
+#treegrid tr[aria-expanded] > td:focus:first-child::before {
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12'><polygon fill='#fff' points='2,0 2,10 10,5'></polygon></svg>") no-repeat;
+}
+
+#treegrid tr[aria-expanded="true"] > td:first-child::before {
+  transform: rotate(90deg);
 }
