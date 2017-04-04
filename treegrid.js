@@ -50,7 +50,7 @@ function onReady(treegrid) {
   }
 
   function focus(elem) {
-    elem.tabIndex = -1; // Ensure focusable
+    elem.tabIndex = 0; // Ensure focusable
     elem.focus();
   }
 
