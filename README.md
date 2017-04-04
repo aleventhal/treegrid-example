@@ -1,6 +1,6 @@
 # ARIA treegrid example
 
-[Jump to interactive version](http://htmlpreview.github.io/?https://github.com/aleventhal/treegrid-example/blob/master/treegrid.html)
+[Jump to interactive version](https://cdn.rawgit.com/aleventhal/treegrid-example/master/treegrid.html)
 
 # Rationale
 
@@ -23,14 +23,14 @@ The main challenge is that the left/right arrow key could be used to collapse/ex
 
 # Keyboard specifics
 * Up/down - moves by row is in an ordinary tree
-* Left/right - collapses/expands or moves to parent/first-child as in an ordinary tree
+* Left/right - collapses/expands or moves to parent/first-child as in an ordinary tree. TBD, what should these keys do during column navigation?
 * Move by word key (ctrl+left/right or alt/left+right depending on the platform) - move by column
 * Home/end - move to first/last row or column, depending on whether the last thing focused was a row or column
 
 # Markup used
 * roles used are treegrid, row and gridcell
 * aria-level: used to set the current level of an item, 1, 2, 3, etc.
-* aria-posinset, aria-setsize: used to indicate the position of an item within it's local group, such as item 3 of 5
+* aria-posinset, aria-setsize: used to indicate the position of an item within it's local group, such as item 3 of 5. TBD, should we set these on cells as well so that the user knows what column # there are in? Possibly overkill.
 * aria-expanded (triststate): this attribute must be removed (not present) if the item cannot be expanded. For expandable items, the value is "true" or "false"
 * aria-hidden: set to "true" for child items that are currently hidden because the parent is collapsed
 * aria-owns: not currently used, awaiting discussion. Could be used for parents to identify their children.
@@ -46,11 +46,17 @@ The main challenge is that the left/right arrow key could be used to collapse/ex
 * ChromeVox
 
 ## Firefox
-* NVDA
-* JAWS
+* NVDA:
+** Row navigation: levels read correctly, all seems good
+** Column navigation: cells are announced as "selected, editable" but aren't either
+* JAWS:
+** Row navigation: levels not read aloud
+** Column navigation: no issues found
+** Collapse expand: new expanded state not spoken, says "row unselected"
 
 ## IE11
 * NVDA:
+** Column navigation: unlike in Firefox, NVDA does not read column labels but instead reads the column number
 * JAWS:
 
 ## Safari
