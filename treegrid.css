@@ -53,12 +53,14 @@
 }
 
 #treegrid tr[aria-expanded] > td:first-child::before {
-  background: url("./row-expand-icon.svg") no-repeat;
+  /*background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12'><polygon fill='black' points='2,0 2,10 10,5'></polygon></svg>") no-repeat;*/
+  background-image: url("row-expand-icon.svg"), url("row-expand-icon-highlighted.svg");
+  background-repeat: no-repeat;
 }
 
 #treegrid tr[aria-expanded]:focus > td:first-child::before,
 #treegrid tr[aria-expanded] > td:focus:first-child::before {
-  background-image: url("./row-expand-icon-highlighted.svg");
+  background-image: url("row-expand-icon-highlighted.svg");
 }
 
 #treegrid tr[aria-expanded="true"] > td:first-child::before {

@@ -1,6 +1,6 @@
 # ARIA treegrid example
 
-[Jump to interactive version](https://cdn.rawgit.com/aleventhal/treegrid-example/master/treegrid.html)
+[Jump to interactive version](https://cdn.rawgit.com/aleventhal/treegrid-example/0.1.4/treegrid.html)
 
 # Rationale
 
