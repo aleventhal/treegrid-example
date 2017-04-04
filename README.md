@@ -62,8 +62,8 @@ The main challenge is that the left/right arrow key could be used to collapse/ex
 
 ## IE11
 ### NVDA:
-** Column navigation: unlike in Firefox, NVDA does not read column labels but instead reads the column number
-** Row navigation: row numbers are reported, unlike with NVDA and Firefox. Unfortunately both row 2 and 3 are reported as row 2.
+* Column navigation: unlike in Firefox, NVDA does not read column labels but instead reads the column number
+* Row navigation: row numbers are reported, unlike with NVDA and Firefox. Unfortunately both row 2 and 3 are reported as row 2.
 ### JAWS:
 ** Could not figure out how to interact with the control in a reasonable manner
 
