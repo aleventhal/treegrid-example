@@ -236,23 +236,32 @@ function onReady(treegrid) {
     if (!currentRow) {
       return;
     }
-    var nextLevel = getLevel(currentRow) + 1;
+    var currentLevel = getLevel(currentRow);
     var rows = getAllRows();
     var currentRowIndex = rows.indexOf(currentRow);
     console.assert(currentRowIndex >= 0);
     var didChange;
+    var doExpandLevel = [];
+    doExpandLevel[currentLevel + 1] = doExpand;
 
     while (++ currentRowIndex < rows.length) {
       var nextRow = rows[currentRowIndex];
-      var isVisible = nextRow.getAttribute('aria-hidden') !== 'true';
-      if (isVisible === doExpand) {
-        break; // Next row already in expected state
-      }
-      if (getLevel(nextRow) !== nextLevel) {
+      var rowLevel = getLevel(nextRow);
+      if (rowLevel <= currentLevel) {
         break; // Next row is not a level down from current row
       }
-      nextRow.setAttribute('aria-hidden', !doExpand);
-      didChange = true;
+      // Only expand the next level if this level is expanded
+      // and previous level is expanded
+      doExpandLevel[rowLevel + 1] =
+        doExpandLevel[rowLevel] &&
+        nextRow.getAttribute('aria-expanded') === 'true';
+      var willHideRow = !doExpandLevel[rowLevel];
+      var isRowHidden = nextRow.getAttribute('aria-hidden') === 'true';
+
+      if (willHideRow !== isRowHidden) {
+        nextRow.setAttribute('aria-hidden', willHideRow);
+        didChange = true;
+      }
     }
     if (didChange) {
       currentRow.setAttribute('aria-expanded', doExpand);
