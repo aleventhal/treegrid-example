@@ -37,6 +37,9 @@
 #treegrid tr[aria-level="4"] > td:first-child {
   padding-left: 7.5ch;
 }
+#treegrid tr[aria-level="5"] > td:first-child {
+  padding-left: 10ch;
+}
 
 /* Collapse/expand icons */
 #treegrid tr > td:first-child::before {
@@ -50,12 +53,12 @@
 }
 
 #treegrid tr[aria-expanded] > td:first-child::before {
-  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12'><polygon points='2,0 2,10 10,5'></polygon></svg>") no-repeat;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12'><polygon fill='black' points='2,0 2,10 10,5'></polygon></svg>") no-repeat;
 }
 
 #treegrid tr[aria-expanded]:focus > td:first-child::before,
 #treegrid tr[aria-expanded] > td:focus:first-child::before {
-  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12'><polygon fill='#fff' points='2,0 2,10 10,5'></polygon></svg>") no-repeat;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12'><polygon fill='white' points='2,0 2,10 10,5'></polygon></svg>") no-repeat;
 }
 
 #treegrid tr[aria-expanded="true"] > td:first-child::before {
