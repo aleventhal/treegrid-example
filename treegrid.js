@@ -67,7 +67,11 @@ function onReady(treegrid) {
         shouldResetToRowModeAfterBlur()) {
         // When focus leaves treegrid, reset focus mode back to rows
         prevTreeGridFocus.removeAttribute('tabindex');
-        prevTreeGridFocus.parentElement.tabIndex = 0;
+        setTimeout(function() {
+          // Wait for a moment so that we don't end up back on row when
+          // trying to shift+tab out of grid
+          prevTreeGridFocus.parentElement.tabIndex = 0;
+        }, 0);
       }
       onFocusIn.prevTreeGridFocus = null;
       return;

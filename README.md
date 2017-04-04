@@ -37,3 +37,22 @@ The main challenge is that the left/right arrow key could be used to collapse/ex
 * aria-labelledby or aria-describedby for headers? Not currently used, awaiting discussion
 * aria-activedescendant -- this example does not use, because it is not exposed to ATs in IE, and thus uses tabindex instead
 * tabindex is set in the JS, as per the usual roving tabindex methodology. Specifically, we use tabindex="0" for the current item so that it is the subitem that gets focused if user tabs out and back in, and tabindex="-1" for all items where we want click-to-focus behavior enabled.
+
+# Observations with screen readers
+## Chrome
+* NVDA
+* JAWS
+* VoiceOver
+* ChromeVox
+
+## Firefox
+* NVDA
+* JAWS
+
+## IE11
+* NVDA:
+* JAWS:
+
+## Safari
+* Chromevox:
+
