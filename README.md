@@ -49,6 +49,7 @@ The main challenge is that the left/right arrow key could be used to collapse/ex
 * Column navigation: reads each item twice
 * Row navigation: does not read expanded state, completely skips reading second column for second row
 ### ChromeVox
+* Pretty broken: reads the words row, column, expanded but just about nothing else
 
 ## Firefox
 ### NVDA:
