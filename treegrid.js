@@ -1,10 +1,14 @@
 function onReady(treegrid) {
-  function keepColAfterRowNav() {
+  function shouldKeepColAfterRowNav() {
     return document.getElementById('keepColAfterRowNav').checked;
   }
 
-  function autoFocusRowOnCol0() {
+  function shouldAutoFocusRowOnCol0() {
     return document.getElementById('autoFocusRowOnCol0').checked;
+  }
+
+  function shouldResetToRowModeAfterBlur() {
+    return document.getElementById('resetToRowModeAfterBlur').checked;
   }
 
   function addTabIndex() {
@@ -42,18 +46,31 @@ function onReady(treegrid) {
   }
 
   function focus(elem) {
-    elem.tabIndex = 0;
+    elem.tabIndex = 0; // Ensure focusable
     elem.focus();
   }
 
   // Restore tabIndex to what it should be when focus switches from
   // one treegrid item to another
-  function onFocusChange(event) {
-    var prevTreeGridFocus = onFocusChange.prevTreeGridFocus;
+  function onFocusIn(event) {
+    var prevTreeGridFocus = onFocusIn.prevTreeGridFocus;
     var newTreeGridFocus =
       treegrid.contains(event.target) && event.target;
 
-    if (prevTreeGridFocus && newTreeGridFocus) {
+    if (!newTreeGridFocus) {
+      // Moved out of treegrid
+      if (prevTreeGridFocus && prevTreeGridFocus.localName === 'td' &&
+        shouldResetToRowModeAfterBlur()) {
+        // When focus leaves treegrid, reset focus mode back to rows
+        prevTreeGridFocus.removeAttribute('tabindex');
+        prevTreeGridFocus.parentElement.tabIndex = 0;
+      }
+      onFocusIn.prevTreeGridFocus = null;
+      return;
+    }
+
+    if (prevTreeGridFocus) {
+      // Stayed in treegrid
       if (prevTreeGridFocus.localName === 'td') {
         // Cells are focusable via click, navigation is only via keystroke
         prevTreeGridFocus.removeAttribute('tabindex');
@@ -64,7 +81,11 @@ function onReady(treegrid) {
       }
     }
 
-    onFocusChange.prevTreeGridFocus = newTreeGridFocus;
+    // This is the new element to tab into within the container
+    newTreeGridFocus.tabIndex = 0;
+
+    // In tree grid
+    onFocusIn.prevTreeGridFocus = newTreeGridFocus;
   }
 
   function getCurrentRow() {
@@ -120,7 +141,7 @@ function onReady(treegrid) {
     }
     while (requiredLevel && requiredLevel !== getLevel(rows[rowIndex]));
 
-    if (!keepColAfterRowNav() ||
+    if (!shouldKeepColAfterRowNav() ||
       !switchRowAndColFocus(currentRow, rows[rowIndex])) {
       focus(rows[rowIndex]);
     }
@@ -154,7 +175,7 @@ function onReady(treegrid) {
     var currentCol = getCurrentColumn(currentRow) || cols[0];
     var currentColIndex = cols.indexOf(currentCol);
     var newColIndex = restrictIndex(currentColIndex + direction, numCols);
-    if (autoFocusRowOnCol0() && newColIndex === 0) {
+    if (shouldAutoFocusRowOnCol0() && newColIndex === 0) {
       focus(currentRow);  // When reaching col 0, set back to row focus
     }
     else {
@@ -181,7 +202,7 @@ function onReady(treegrid) {
     // Move to first/last col
     var cols = getNavigableCols(currentRow);
     if (direction === -1) {
-      if (autoFocusRowOnCol0()) {
+      if (shouldAutoFocusRowOnCol0()) {
         focus(currentRow);
       }
       else {
@@ -270,7 +291,7 @@ function onReady(treegrid) {
 
   addTabIndex();
   treegrid.addEventListener('keydown', onKeyDown);
-  treegrid.addEventListener('focusin', onFocusChange);
+  window.addEventListener('focusin', onFocusIn);
 }
 
 document.addEventListener('DOMContentLoaded', function() {
