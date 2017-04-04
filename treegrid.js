@@ -50,7 +50,7 @@ function onReady(treegrid) {
   }
 
   function focus(elem) {
-    elem.tabIndex = 0; // Ensure focusable
+    elem.tabIndex = -1; // Ensure focusable
     elem.focus();
   }
 
@@ -90,7 +90,10 @@ function onReady(treegrid) {
     }
 
     // This is the new element to tab into within the container
-    newTreeGridFocus.tabIndex = 0;
+    // Waiting fixes bug with tabbing when screen readers active in IE
+    setTimeout(function() {
+      newTreeGridFocus.tabIndex = 0;
+    }, 0);
 
     // In tree grid
     onFocus.prevTreeGridFocus = newTreeGridFocus;

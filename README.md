@@ -1,6 +1,6 @@
 # ARIA treegrid example
 
-[Jump to interactive version](https://cdn.rawgit.com/aleventhal/treegrid-example/0.1.4/treegrid.html)
+[Jump to interactive version](https://cdn.rawgit.com/aleventhal/treegrid-example/0.1.5/treegrid.html)
 
 # Rationale
 
@@ -40,25 +40,29 @@ The main challenge is that the left/right arrow key could be used to collapse/ex
 
 # Observations with screen readers
 ## Chrome
-* NVDA
-* JAWS
-* VoiceOver
-* ChromeVox
+### NVDA
+### JAWS
+### VoiceOver
+### ChromeVox
 
 ## Firefox
-* NVDA:
-** Row navigation: levels read correctly, all seems good
-** Column navigation: cells are announced as "selected, editable" but aren't either
-* JAWS:
-** Row navigation: levels not read aloud
-** Column navigation: no issues found
-** Collapse expand: new expanded state not spoken, says "row unselected"
+### NVDA:
+* Row navigation: levels read correctly, all seems good
+* Column navigation: cells are announced as "selected, editable" but aren't either
+### JAWS:
+* Row navigation: levels not reported
+* Column navigation: no issues found
+* Other: when collapsing/expanding: new collapsed/expanded state not spoken, says "row unselected"
 
 ## IE11
-* NVDA:
+### NVDA:
 ** Column navigation: unlike in Firefox, NVDA does not read column labels but instead reads the column number
-* JAWS:
+** Row navigation: row numbers are reported, unlike with NVDA and Firefox. Unfortunately both row 2 and 3 are reported as row 2.
+### JAWS:
+** Could not figure out how to interact with the control in a reasonable manner
 
 ## Safari
-* Chromevox:
+### VoiceOver
+* Row navigation:
+* Column navigation
 
