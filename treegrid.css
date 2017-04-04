@@ -53,12 +53,14 @@
 }
 
 #treegrid tr[aria-expanded] > td:first-child::before {
-  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12'><polygon fill='black' points='2,0 2,10 10,5'></polygon></svg>") no-repeat;
+  /*background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12'><polygon fill='black' points='2,0 2,10 10,5'></polygon></svg>") no-repeat;*/
+  background: url("data:image/svg+xml;charset=utf-8;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPScxMicgaGVpZ2h0PScxMic+PHBvbHlnb24gZmlsbD0iYmxhY2siIHBvaW50cz0iMiwwIDIsMTAgMTAsNSI+PC9wb2x5Z29uPjwvc3ZnPg==") no-repeat;
 }
 
 #treegrid tr[aria-expanded]:focus > td:first-child::before,
 #treegrid tr[aria-expanded] > td:focus:first-child::before {
-  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12'><polygon fill='white' points='2,0 2,10 10,5'></polygon></svg>") no-repeat;
+  /*background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12'><polygon fill='white' points='2,0 2,10 10,5'></polygon></svg>") no-repeat;*/
+  background: url("data:image/svg+xml;charset=utf-8;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPScxMicgaGVpZ2h0PScxMic+PHBvbHlnb24gZmlsbD0id2hpdGUiIHBvaW50cz0iMiwwIDIsMTAgMTAsNSI+PC9wb2x5Z29uPjwvc3ZnPg==");
 }
 
 #treegrid tr[aria-expanded="true"] > td:first-child::before {
