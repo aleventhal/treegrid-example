@@ -160,7 +160,9 @@ function onReady(treegrid) {
 
     var fromCols = getNavigableCols(fromRow);
     var currentColIndex = fromCols.indexOf(currentCol);
-    if (currentColIndex <= 0) {
+    var firstFocusableColIndex = shouldFocusFirstColumn() ? 0 : 1;
+
+    if (currentColIndex < firstFocusableColIndex) {
       return;
     }
 
