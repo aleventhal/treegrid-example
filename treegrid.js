@@ -59,7 +59,7 @@ function onReady(treegrid) {
   function onFocus(event) {
     var prevTreeGridFocus = onFocus.prevTreeGridFocus;
     var newTreeGridFocus =
-      treegrid.contains(event.target) && event.target;
+      event.target !== window && treegrid.contains(event.target) && event.target;
 
     if (!newTreeGridFocus) {
       // Moved out of treegrid
