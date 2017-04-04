@@ -1,14 +1,18 @@
 function onReady(treegrid) {
-  function shouldKeepColAfterRowNav() {
-    return document.getElementById('keepColAfterRowNav').checked;
+  function isChecked(id) {
+    return document.getElementById(id).checked;
   }
 
-  function shouldAutoFocusRowOnCol0() {
-    return document.getElementById('autoFocusRowOnCol0').checked;
+  function shouldKeepColAfterRowNav() {
+    return isChecked('keepColAfterRowNav');
   }
 
   function shouldResetToRowModeAfterBlur() {
-    return document.getElementById('resetToRowModeAfterBlur').checked;
+    return isChecked('resetToRowModeAfterBlur');
+  }
+
+  function shouldFocusFirstColumn() {
+    return isChecked('focusFirstColumn');
   }
 
   function addTabIndex() {
@@ -172,15 +176,20 @@ function onReady(treegrid) {
     }
     var cols = getNavigableCols(currentRow);
     var numCols = cols.length;
-    var currentCol = getCurrentColumn(currentRow) || cols[0];
+    var currentCol = getCurrentColumn(currentRow);
     var currentColIndex = cols.indexOf(currentCol);
-    var newColIndex = restrictIndex(currentColIndex + direction, numCols);
-    if (shouldAutoFocusRowOnCol0() && newColIndex === 0) {
-      focus(currentRow);  // When reaching col 0, set back to row focus
+    var newColIndex;
+    var firstFocusableColIndex = shouldFocusFirstColumn() ? 0 : 1;
+    // First alt/ctrl+right moves to first column
+    newColIndex = (currentCol || direction < 0) ? currentColIndex + direction :
+      firstFocusableColIndex;
+    // Moving past beginning focuses row
+    if (newColIndex < firstFocusableColIndex) {
+      focus(currentRow);
+      return;
     }
-    else {
-      focus(cols[newColIndex]);
-    }
+    newColIndex = restrictIndex(newColIndex, numCols);
+    focus(cols[newColIndex]);
   }
 
   function moveToExtreme(direction) {
@@ -202,11 +211,11 @@ function onReady(treegrid) {
     // Move to first/last col
     var cols = getNavigableCols(currentRow);
     if (direction === -1) {
-      if (shouldAutoFocusRowOnCol0()) {
-        focus(currentRow);
+      if (shouldFocusFirstColumn()) {
+        focus(cols[0]);
       }
       else {
-        focus(cols[0]);
+        focus(currentRow);
       }
     }
     else {

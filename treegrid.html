@@ -10,14 +10,14 @@
   <fieldset>
     <legend>Behavior settings</legend>
     <div>
-    <input id="autoFocusRowOnCol0" type="checkbox" checked>
-    <label for="autoFocusRowOnCol0">Automatically focus row after navigating to first column</label>
-    <div>
     <input id="keepColAfterRowNav" type="checkbox" checked>
     <label for="keepColAfterRowNav">If switching rows, and a column was focused, stay in the same column (rather than focusing entire new row)</label>
     <div>
     <input id="resetToRowModeAfterBlur" type="checkbox" checked>
     <label for="resetToRowModeAfterBlur">Reset to row focus mode after tabbing out and back in</label>
+    <div>
+    <input id="focusFirstColumn" type="checkbox" checked>
+    <label for="focusFirstColumn">Can focus first column (will switch back to row mode if you move back beyond first column)</label>
   </fieldset>
 </form>
 
