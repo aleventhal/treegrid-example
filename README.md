@@ -41,8 +41,13 @@ The main challenge is that the left/right arrow key could be used to collapse/ex
 # Observations with screen readers
 ## Chrome
 ### NVDA
+* Pretty broken: reads the words row, column but just about nothing else
 ### JAWS
+* Pretty broken: reads the word expanded, but just about nothing else
 ### VoiceOver
+* First focus: calls it a listbox
+* Column navigation: reads each item twice
+* Row navigation: does not read expanded state, completely skips reading second column for second row
 ### ChromeVox
 
 ## Firefox
@@ -63,6 +68,5 @@ The main challenge is that the left/right arrow key could be used to collapse/ex
 
 ## Safari
 ### VoiceOver
-* Row navigation:
-* Column navigation
+* Row navigation: doesn't let us do this, reads cells no matter what
 
