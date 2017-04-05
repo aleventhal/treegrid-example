@@ -19,10 +19,6 @@ function onReady(treegrid, moveByWordModifier) {
     return isChecked('addCellLabelledBy');
   }
 
-  function shouldAddLabelOnCellFocus() {
-    return isChecked('addCellLabel');
-  }
-
   function onRolePref() {
     function setRole(elementList, role) {
       var index = elementList.length;
@@ -71,10 +67,6 @@ function onReady(treegrid, moveByWordModifier) {
     return index >= numItems ? index - 1: index;
   }
 
-  function addLabel(elem) {
-    elem.setAttribute('aria-label', elem.innerText);
-  }
-
   function addLabelledBy(elem) {
     if (elem.hasAttribute('aria-labelledby')) {
       return;
@@ -89,10 +81,7 @@ function onReady(treegrid, moveByWordModifier) {
   function focus(elem) {
     elem.tabIndex = 0; // Ensure focusable
     if (elem.localName === 'td') {
-      if (shouldAddLabelOnCellFocus()) {
-        addLabel(elem);
-      }
-      else if (shouldAddLabelledByOnCellFocus()) {
+      if (shouldAddLabelledByOnCellFocus()) {
         addLabelledBy(elem);
       }
     }

@@ -53,7 +53,9 @@ The main challenge is that the left/right arrow key could be used to collapse/ex
 <tbody>
 <tr>
 <th>Chomevox</th>
-<td>Does not read name unless treeitem, auto label options checked, as Chrome is not exposing name</td>
+<td>
+<li>Row nav: Does not read name unless role="treeitem" used instead of role="row"
+<li>Cell nav: Does not read name on cells even if aria-label or aria-labelledby are set</td>
 <td></td>
 <td></td>
 <td></td>
