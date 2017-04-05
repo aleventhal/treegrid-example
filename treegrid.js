@@ -71,7 +71,7 @@ function onReady(treegrid, moveByWordModifier) {
     }
     if (!elem.id) {
       addLabelledBy.counter = (addLabelledBy.counter || 0) + 1;
-      elem.id = addLabelledBy.counter;
+      elem.id = elem.localName + addLabelledBy.counter;
     }
     elem.setAttribute('aria-labelledby', elem.id);
   }
