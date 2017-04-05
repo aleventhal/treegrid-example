@@ -293,11 +293,29 @@ function onReady(treegrid, moveByWordModifier) {
     function isMoveByWordModifierPressed() {
       // Be very strict about move-by-word keystroke detection as we don't
       // want to prevent other commands in OS or screen reader
-      if (!event[moveByWordModifier] || event.metaKey || event.shiftKey) {
+      if (!event[moveByWordModifier]) {
         return;
       }
       var numModifiersPressed = Boolean(event.ctrlKey) + Boolean(event.altKey);
       return numModifiersPressed === 1; // No more than one modifer pressed
+    }
+
+    function isAltOrCtrlPressed() {
+      return event.ctrlKey || event.altKey;
+    }
+
+    function isUnusedModifierCombo() {
+      if (event.metaKey || event.shiftKey) {
+        return true; // We ignore these no matter what
+      }
+      if (event.keyCode === LEFT || event.keyCode === RIGHT) {
+        if (isAltOrCtrlPressed() && !isMoveByWordModifierPressed()) {
+          return true;
+        }
+      }
+      else if (isAltOrCtrlPressed()) {
+        return true;
+      }
     }
 
     var UP = 38;
@@ -306,6 +324,11 @@ function onReady(treegrid, moveByWordModifier) {
     var RIGHT = 39;
     var HOME = 36;
     var END = 35;
+
+    if (isUnusedModifierCombo(event)) {
+      return;
+    }
+
     switch (event.keyCode) {
     case DOWN:
       moveByRow(1); break;
