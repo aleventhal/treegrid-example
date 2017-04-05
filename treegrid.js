@@ -15,6 +15,19 @@ function onReady(treegrid) {
     return isChecked('focusFirstColumn');
   }
 
+  function onRoleSetting() {
+    function setRole(elementList, role) {
+      var index = elementList.length;
+      while (index --) {
+        elementList[index].setAttribute('role', role);
+      }
+    }
+    var useTree = document.getElementById('useTree').checked;
+    setRole([ treegrid ], useTree ? 'tree' : 'treegrid');
+    var treeItems = treegrid.getElementsByTagName('tr');
+    setRole(treeItems, useTree ? 'treeitem' : 'row');
+  }
+
   function addTabIndex() {
     // Add tabindex="0" to first row, "-1" to other rows
     // We will use the roving tabindex method since aria-activedescendant
@@ -319,8 +332,10 @@ function onReady(treegrid) {
   addTabIndex();
   treegrid.addEventListener('keydown', onKeyDown);
   window.addEventListener('focus', onFocus);
+  document.getElementById('useTree').addEventListener('change', onRoleSetting);
 }
 
 document.addEventListener('DOMContentLoaded', function() {
   onReady(document.getElementById('treegrid'));
 });
+
