@@ -26,8 +26,6 @@ function onReady(treegrid, moveByWordModifier) {
         elementList[index].setAttribute('role', role);
       }
     }
-    var useTree = document.getElementById('useTree').checked;
-    setRole([ treegrid ], useTree ? 'tree' : 'treegrid');
     var useTreeItem = document.getElementById('useTreeItem').checked;
     var treeItems = treegrid.getElementsByTagName('tr');
     setRole(treeItems, useTreeItem ? 'treeitem' : 'row');
@@ -386,7 +384,6 @@ function onReady(treegrid, moveByWordModifier) {
   addTabIndex();
   treegrid.addEventListener('keydown', onKeyDown);
   window.addEventListener('focusin', onFocusIn);
-  document.getElementById('useTree').addEventListener('change', onRolePref);
   document.getElementById('useTreeItem').addEventListener('change', onRolePref);
 }
 
