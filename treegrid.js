@@ -1,4 +1,4 @@
-function onReady(treegrid) {
+function onReady(treegrid, moveByWordModifier) {
   function isChecked(id) {
     return document.getElementById(id).checked;
   }
@@ -290,6 +290,16 @@ function onReady(treegrid) {
   }
 
   function onKeyDown(event) {
+    function isMoveByWordModifierPressed() {
+      // Be very strict about move-by-word keystroke detection as we don't
+      // want to prevent other commands in OS or screen reader
+      if (!event[moveByWordModifier] || event.metaKey || event.shiftKey) {
+        return;
+      }
+      var numModifiersPressed = Boolean(event.ctrlKey) + Boolean(event.altKey);
+      return numModifiersPressed === 1; // No more than one modifer pressed
+    }
+
     var UP = 38;
     var DOWN = 40;
     var LEFT = 37;
@@ -302,7 +312,7 @@ function onReady(treegrid) {
     case UP:
       moveByRow(-1); break;
     case LEFT:
-      if (event.altKey || event.ctrlKey) {
+      if (isMoveByWordModifierPressed()) {
         moveByCol(-1);
       }
       else {
@@ -336,6 +346,7 @@ function onReady(treegrid) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-  onReady(document.getElementById('treegrid'));
+  var isMac = navigator.platform.substr(0,3) === 'Mac';
+  onReady(document.getElementById('treegrid'), isMac ? 'altKey' : 'ctrlKey');
 });
 
