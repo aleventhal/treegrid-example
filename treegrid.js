@@ -320,7 +320,7 @@ function onReady(treegrid, moveByWordModifier) {
       }
       break;
     case RIGHT:
-      if (event.altKey || event.ctrlKey) {
+      if (isMoveByWordModifierPressed()) {
         moveByCol(1);
       }
       else {
