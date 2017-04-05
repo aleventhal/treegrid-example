@@ -15,6 +15,10 @@ function onReady(treegrid, moveByWordModifier) {
     return isChecked('focusFirstColumn');
   }
 
+  function shouldAddLabelOnCellFocus() {
+    return isChecked('addCellLabels');
+  }
+
   function onRolePref() {
     function setRole(elementList, role) {
       var index = elementList.length;
@@ -63,14 +67,28 @@ function onReady(treegrid, moveByWordModifier) {
     return index >= numItems ? index - 1: index;
   }
 
+  function labelCellAsSelf(cell) {
+    if (cell.hasAttribute('aria-labelledby')) {
+      return;
+    }
+    if (!cell.id) {
+      labelCellAsSelf.counter = (labelCellAsSelf.counter || 0) + 1;
+      cell.id = labelCellAsSelf.counter;
+    }
+    cell.setAttribute('aria-labelledby', cell.id);
+  }
+
   function focus(elem) {
     elem.tabIndex = 0; // Ensure focusable
+    if (elem.localName === 'td' && shouldAddLabelOnCellFocus()) {
+      labelCellAsSelf(elem);
+    }
     elem.focus();
   }
 
   // Restore tabIndex to what it should be when focus switches from
   // one treegrid item to another
-  function onFocus(event) {
+  function onFocusIn(event) {
     var prevTreeGridFocus = onFocus.prevTreeGridFocus;
     var newTreeGridFocus =
       event.target !== window && treegrid.contains(event.target) && event.target;
@@ -365,7 +383,7 @@ function onReady(treegrid, moveByWordModifier) {
 
   addTabIndex();
   treegrid.addEventListener('keydown', onKeyDown);
-  window.addEventListener('focus', onFocus);
+  window.addEventListener('focusin', onFocusIn);
   document.getElementById('useTree').addEventListener('change', onRolePref);
   document.getElementById('useTreeItem').addEventListener('change', onRolePref);
 }
