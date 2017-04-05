@@ -15,7 +15,7 @@ function onReady(treegrid, moveByWordModifier) {
     return isChecked('focusFirstColumn');
   }
 
-  function onRoleSetting() {
+  function onRolePref() {
     function setRole(elementList, role) {
       var index = elementList.length;
       while (index --) {
@@ -24,8 +24,9 @@ function onReady(treegrid, moveByWordModifier) {
     }
     var useTree = document.getElementById('useTree').checked;
     setRole([ treegrid ], useTree ? 'tree' : 'treegrid');
+    var useTreeItem = document.getElementById('useTreeItem').checked;
     var treeItems = treegrid.getElementsByTagName('tr');
-    setRole(treeItems, useTree ? 'treeitem' : 'row');
+    setRole(treeItems, useTreeItem ? 'treeitem' : 'row');
   }
 
   function addTabIndex() {
@@ -365,7 +366,8 @@ function onReady(treegrid, moveByWordModifier) {
   addTabIndex();
   treegrid.addEventListener('keydown', onKeyDown);
   window.addEventListener('focus', onFocus);
-  document.getElementById('useTree').addEventListener('change', onRoleSetting);
+  document.getElementById('useTree').addEventListener('change', onRolePref);
+  document.getElementById('useTreeItem').addEventListener('change', onRolePref);
 }
 
 document.addEventListener('DOMContentLoaded', function() {
