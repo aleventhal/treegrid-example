@@ -15,8 +15,12 @@ function onReady(treegrid, moveByWordModifier) {
     return isChecked('focusFirstColumn');
   }
 
+  function shouldAddLabelledByOnCellFocus() {
+    return isChecked('addCellLabelledBy');
+  }
+
   function shouldAddLabelOnCellFocus() {
-    return isChecked('addCellLabels');
+    return isChecked('addCellLabel');
   }
 
   function onRolePref() {
@@ -67,21 +71,30 @@ function onReady(treegrid, moveByWordModifier) {
     return index >= numItems ? index - 1: index;
   }
 
-  function labelCellAsSelf(cell) {
-    if (cell.hasAttribute('aria-labelledby')) {
+  function addLabel(elem) {
+    elem.setAttribute('aria-label', elem.innerText);
+  }
+
+  function addLabelledBy(elem) {
+    if (elem.hasAttribute('aria-labelledby')) {
       return;
     }
-    if (!cell.id) {
-      labelCellAsSelf.counter = (labelCellAsSelf.counter || 0) + 1;
-      cell.id = labelCellAsSelf.counter;
+    if (!elem.id) {
+      addLabelledBy.counter = (addLabelledBy.counter || 0) + 1;
+      elem.id = addLabelledBy.counter;
     }
-    cell.setAttribute('aria-labelledby', cell.id);
+    elem.setAttribute('aria-labelledby', elem.id);
   }
 
   function focus(elem) {
     elem.tabIndex = 0; // Ensure focusable
-    if (elem.localName === 'td' && shouldAddLabelOnCellFocus()) {
-      labelCellAsSelf(elem);
+    if (elem.localName === 'td') {
+      if (shouldAddLabelOnCellFocus()) {
+        addLabel(elem);
+      }
+      else if (shouldAddLabelledByOnCellFocus()) {
+        addLabelledBy(elem);
+      }
     }
     elem.focus();
   }
@@ -89,7 +102,7 @@ function onReady(treegrid, moveByWordModifier) {
   // Restore tabIndex to what it should be when focus switches from
   // one treegrid item to another
   function onFocusIn(event) {
-    var prevTreeGridFocus = onFocus.prevTreeGridFocus;
+    var prevTreeGridFocus = onFocusIn.prevTreeGridFocus;
     var newTreeGridFocus =
       event.target !== window && treegrid.contains(event.target) && event.target;
 
@@ -105,7 +118,7 @@ function onReady(treegrid, moveByWordModifier) {
           prevTreeGridFocus.parentElement.tabIndex = 0;
         }, 0);
       }
-      onFocus.prevTreeGridFocus = null;
+      onFocusIn.prevTreeGridFocus = null;
       return;
     }
 
@@ -128,7 +141,7 @@ function onReady(treegrid, moveByWordModifier) {
     }, 0);
 
     // In tree grid
-    onFocus.prevTreeGridFocus = newTreeGridFocus;
+    onFocusIn.prevTreeGridFocus = newTreeGridFocus;
   }
 
   function getCurrentRow() {

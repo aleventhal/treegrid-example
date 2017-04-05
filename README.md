@@ -1,6 +1,6 @@
 # ARIA treegrid example
 
-[Jump to interactive version](https://cdn.rawgit.com/aleventhal/treegrid-example/0.1.15/treegrid.html)
+[Jump to interactive version](https://cdn.rawgit.com/aleventhal/treegrid-example/0.1.16/treegrid.html)
 
 # Rationale
 
@@ -53,14 +53,14 @@ The main challenge is that the left/right arrow key could be used to collapse/ex
 <tbody>
 <tr>
 <th>Chomevox</th>
-<td>Pretty broken: reads the words row, column, expanded but just about nothing else</td>
+<td>Does not read name unless treeitem, auto label options checked, as Chrome is not exposing name</td>
 <td></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <th>JAWS</th>
-<td>Pretty broken: reads the word expanded, but just about nothing else
+<td>Does not read name unless treeitem, auto label options checked, as Chrome is not exposing name</td>
 <td>
   <li>Row navigation: levels not reported
   <li>Column navigation: no issues found
@@ -71,13 +71,17 @@ The main challenge is that the left/right arrow key could be used to collapse/ex
 </tr>
 <tr>
 <th>NVDA</th>
-<td>Pretty broken: reads the words row, column but just about nothing else</td>
+<td>Does not read name unless treeitem, auto label options checked, as Chrome is not exposing name</td>
 <td>
   <li>Row navigation: levels read correctly, all seems good
   <li>Column navigation: cells are announced as "selected, editable" but aren't either
+  <li>Has very cool feature where Ctrl+alt arrow can navigate cells of table from current position, without
+      additional help from the ARIA widget. If all screen readers did this then the widget author would not need
+      to implement the cell navigation
 <td>
   <li>Column navigation: unlike in Firefox, NVDA does not read column labels but instead reads the column number
-  <li>Row navigation: row numbers are reported, unlike with NVDA and Firefox. Unfortunately both row 2 and 3 are reported as
+  <li>Row navigation: row numbers are reported, unlike with NVDA and Firefox. Unfortunately both row 2 and 3 are reported as row 2 :/
+  <li>The ctrl+alt+arrow feature that is available in Firefox does not work in IE
 </tr>
 <tr>
 <th>VoiceOver</th>
