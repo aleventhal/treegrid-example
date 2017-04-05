@@ -33,7 +33,7 @@ The main challenge is that the left/right arrow key could be used to collapse/ex
 * aria-posinset, aria-setsize: used to indicate the position of an item within it's local group, such as item 3 of 5. TBD, should we set these on cells as well so that the user knows what column # there are in? Possibly overkill.
 * aria-expanded (triststate): this attribute must be removed (not present) if the item cannot be expanded. For expandable items, the value is "true" or "false"
 * aria-hidden: set to "true" for child items that are currently hidden because the parent is collapsed
-* aria-owns: not currently used, awaiting discussion. Could be used for parents to identify their children.
+* aria-owns: not currently used, awaiting discussion. Could be used for parents to identify their children, but it doesn't look like any screen readers actually use this so it seems to be a wasteful recommendation.
 * aria-labelledby or aria-describedby for headers? Not currently used, awaiting discussion
 * aria-activedescendant -- this example does not use, because it is not exposed to ATs in IE, and thus uses tabindex instead
 * tabindex is set in the JS, as per the usual roving tabindex methodology. Specifically, we use tabindex="0" for the current item so that it is the subitem that gets focused if user tabs out and back in, and tabindex="-1" for all items where we want click-to-focus behavior enabled.
