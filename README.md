@@ -1,6 +1,6 @@
 # ARIA treegrid example
 
-[Jump to interactive version](https://cdn.rawgit.com/aleventhal/treegrid-example/0.1.21/treegrid.html)
+[Jump to interactive version](https://cdn.rawgit.com/aleventhal/treegrid-example/0.1.22/treegrid.html)
 
 # Rationale
 
@@ -36,6 +36,7 @@ The main challenge is that the left/right arrow key could be used to collapse/ex
 * aria-owns: not currently used, awaiting discussion. Could be used for parents to identify their children, but it doesn't look like any screen readers actually use this so it seems to be a wasteful recommendation.
 * aria-labelledby or aria-describedby for headers? Not currently used, awaiting discussion
 * aria-activedescendant -- this example does not use, because it is not exposed to ATs in IE, and thus uses tabindex instead
+* aria-readonly: be default, a gridcell is editable, but these tend not to be. This idea originated for grids, which are like spreadsheets, where most cells are probably editable. It may not make sense for a treegrid, but this is the legacy. Bottom line: if you don't want "editable" read for every cell in some browser-screen reader combinations, put aria-readonly="true" on the appropriate role="gridcell" elements.
 * tabindex is set in the JS, as per the usual roving tabindex methodology. Specifically, we use tabindex="0" for the current item so that it is the subitem that gets focused if user tabs out and back in, and tabindex="-1" for all items where we want click-to-focus behavior enabled.
 
 # Questions
