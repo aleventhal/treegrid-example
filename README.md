@@ -36,7 +36,7 @@ The main challenge is that the left/right arrow key could be used to collapse/ex
 * aria-owns: not currently used, awaiting discussion. Could be used for parents to identify their children, but it doesn't look like any screen readers actually use this so it seems to be a wasteful recommendation.
 * aria-labelledby or aria-describedby for headers? Not currently used, awaiting discussion
 * aria-activedescendant -- this example does not use, because it is not exposed to ATs in IE, and thus uses tabindex instead
-* aria-readonly: be default, a gridcell is editable, but these tend not to be. This idea originated for grids, which are like spreadsheets, where most cells are probably editable. It may not make sense for a treegrid, but this is the legacy. Bottom line: if you don't want "editable" read for every cell in some browser-screen reader combinations, put aria-readonly="true" on the appropriate role="gridcell" elements.
+* aria-readonly: be default, a gridcell is editable, but these tend not to be. This idea originated for grids, which are like spreadsheets, where most cells are probably editable. It may not make sense for a treegrid, but this is the legacy. Bottom line: if you don't want "editable" read for every cell in some browser-screen reader combinations, you'll need to put aria-readonly="true" on the appropriate role="gridcell" elements.
 * tabindex is set in the JS, as per the usual roving tabindex methodology. Specifically, we use tabindex="0" for the current item so that it is the subitem that gets focused if user tabs out and back in, and tabindex="-1" for all items where we want click-to-focus behavior enabled.
 
 # Questions
@@ -80,7 +80,10 @@ We should look at nameFromContents in the ARIA spec, as well as the Firefox impl
 </tr>
 <tr>
 <th>NVDA</th>
-<td>Does not read name unless treeitem, auto label options checked, as Chrome is not exposing name</td>
+<td>
+  <li>Row navigation: Does not read name unless treeitem, auto label options checked, as Chrome is not exposing name
+  <li>Column navigation: Does not read column headers
+</td>
 <td>
   <li>Row navigation: levels read correctly, all seems good
   <li>Column navigation: cells are announced as "selected" but this seems redundant since it's not an aria-multiselectable treegrid
