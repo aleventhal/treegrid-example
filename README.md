@@ -83,7 +83,7 @@ We should look at nameFromContents in the ARIA spec, as well as the Firefox impl
 <td>Does not read name unless treeitem, auto label options checked, as Chrome is not exposing name</td>
 <td>
   <li>Row navigation: levels read correctly, all seems good
-  <li>Column navigation: cells are announced as "selected, editable" but aren't either
+  <li>Column navigation: cells are announced as "selected" but this seems redundant since it's not an aria-multiselectable treegrid
   <li>Has very cool feature where Ctrl+alt arrow can navigate cells of table from current position, without
       additional help from the ARIA widget. If all screen readers did this then the widget author would not need
       to implement the cell navigation
