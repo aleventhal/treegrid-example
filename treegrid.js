@@ -1,3 +1,4 @@
+// TODO put aria-readme everywhere
 function onReady(treegrid, moveByWordModifier) {
   function isChecked(id) {
     return document.getElementById(id).checked;
@@ -13,10 +14,6 @@ function onReady(treegrid, moveByWordModifier) {
 
   function shouldFocusFirstColumn() {
     return isChecked('focusFirstColumn');
-  }
-
-  function shouldAddLabelledByOnCellFocus() {
-    return isChecked('addCellLabelledBy');
   }
 
   function onRolePref() {
@@ -65,24 +62,8 @@ function onReady(treegrid, moveByWordModifier) {
     return index >= numItems ? index - 1: index;
   }
 
-  function addLabelledBy(elem) {
-    if (elem.hasAttribute('aria-labelledby')) {
-      return;
-    }
-    if (!elem.id) {
-      addLabelledBy.counter = (addLabelledBy.counter || 0) + 1;
-      elem.id = elem.localName + addLabelledBy.counter;
-    }
-    elem.setAttribute('aria-labelledby', elem.id);
-  }
-
   function focus(elem) {
     elem.tabIndex = 0; // Ensure focusable
-    if (elem.localName === 'td') {
-      if (shouldAddLabelledByOnCellFocus()) {
-        addLabelledBy(elem);
-      }
-    }
     elem.focus();
   }
 

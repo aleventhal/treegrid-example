@@ -1,6 +1,6 @@
 # ARIA treegrid example
 
-[Jump to interactive version](https://cdn.rawgit.com/aleventhal/treegrid-example/0.1.20/treegrid.html)
+[Jump to interactive version](https://cdn.rawgit.com/aleventhal/treegrid-example/0.1.21/treegrid.html)
 
 # Rationale
 
@@ -37,6 +37,12 @@ The main challenge is that the left/right arrow key could be used to collapse/ex
 * aria-labelledby or aria-describedby for headers? Not currently used, awaiting discussion
 * aria-activedescendant -- this example does not use, because it is not exposed to ATs in IE, and thus uses tabindex instead
 * tabindex is set in the JS, as per the usual roving tabindex methodology. Specifically, we use tabindex="0" for the current item so that it is the subitem that gets focused if user tabs out and back in, and tabindex="-1" for all items where we want click-to-focus behavior enabled.
+
+# Questions
+
+* Should a row automatically compute it's name or is this too much given the prevelance of tables on the web?
+We should look at nameFromContents in the ARIA spec, as well as the Firefox implementation.
+* Should treeitem get nameFromContents? What about nested treeitems? Aaron thinks you never nest treeitems for other reasons includings CSS.
 
 # Observations with screen readers
 
