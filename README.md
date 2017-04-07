@@ -50,7 +50,7 @@ We should look at nameFromContents in the ARIA spec, as well as the Firefox impl
 <thead>
   <tr>
     <th></th>
-    <th>Chrome</th>
+    <th>Chrome (Canary currently required)</th>
     <th>Firefox</th>
     <th>IE11</th>
     <th>Safari</th>
