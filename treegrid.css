@@ -18,7 +18,6 @@
 #treegrid :focus {
   background-color: hsl(230, 60%, 40%);
   color: white;
-  fill: white; /* For triangle color */
   outline: 0;
 }
 
