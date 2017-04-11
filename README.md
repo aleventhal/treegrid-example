@@ -22,10 +22,39 @@ The main challenge is that the left/right arrow key could be used to collapse/ex
 * Ideally, screen readers would automatically read from the currently focused cell to the end of the row. The benefit of this would be that the user could effectively always be in row mode, as the screen reader would end up reading the entire line when moving to the next row anyway. However, screen readers don't necessarily do this currently. Thus, the approach was taken that when the first column would have been active, we focus the entire row, to help the screen reader know to read the entire thing.
 
 # Keyboard specifics
-* Up/down - moves by row is in an ordinary tree
-* Left/right - collapses/expands or moves to parent/first-child as in an ordinary tree. TBD, what should these keys do during column navigation?
-* Move by word key (ctrl+left/right or alt/left+right depending on the platform) - move by column
-* Home/end - move to first/last row or column, depending on whether the last thing focused was a row or column
+<table>
+<thead>
+<tr>
+<th>Keys</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+  <tr>
+    <td>Up/down</td>
+    <td>Move by row as in an ordinary tree. If focused on a cell, will move
+    to next cell</td>
+  </tr>
+  <tr>
+    <td>Left/right</td>
+    <td>Collapse/expand as in an ordinary tree</td>
+  </tr>
+  <tr>
+    <td>Home/end</td>
+    <td>Move to first/last row</td>
+  </tr>
+  <tr>
+    <td>Tab/shift+tab</td>
+    <td>If there are focusable items in the currently active row,
+        will navigate between them, otherwise navigates out of the treegrid</td>
+  </tr>
+  <tr>
+    <td>Spacebar</td>
+    <td>In a multiselectable treegrid, will toggle checkbox at start of row
+    that corresponds to selecting the current row</td>
+  </tr>
+</tbody>
+</table>
 
 # Markup used
 * roles used are treegrid, row and gridcell
@@ -37,6 +66,7 @@ The main challenge is that the left/right arrow key could be used to collapse/ex
 * aria-labelledby or aria-describedby for headers? Not currently used, awaiting discussion
 * aria-activedescendant -- this example does not use, because it is not exposed to ATs in IE, and thus uses tabindex instead
 * aria-readonly: be default, a grid/treegrid is editable, but these tend not to be. This is mentioned in the text of the ARIA spec for grid/treegrid but doesn't seem to have made its way into the AAM. This idea originated for grids, which are like spreadsheets, where most cells are probably editable. It may not make sense for a treegrid, but this is the legacy. Bottom line: if you don't want "editable" read for every cell in some browser-screen reader combinations, you'll need to put aria-readonly="true" on the appropriate role="gridcell" elements or on the grid/treegrid itself.
+* aria-selected: used on row in the case of a multiselectable treegrid where each row begins with a checkbox. Must be set to false or true so that it is clear that row is selectable.
 * tabindex is set in the JS, as per the usual roving tabindex methodology. Specifically, we use tabindex="0" for the current item so that it is the subitem that gets focused if user tabs out and back in, and tabindex="-1" for all items where we want click-to-focus behavior enabled.
 
 # Questions
