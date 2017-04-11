@@ -125,6 +125,10 @@ function onReady(treegrid) {
     }
   }
 
+  function isRowFocused() {
+    return getRowWithFocus() === document.activeElement;
+  }
+
   function getColWithFocus(currentRow) {
     if (currentRow) {
       var possibleCol = document.activeElement;
@@ -284,14 +288,26 @@ function onReady(treegrid) {
     case UP:
       moveByRow(-1); break;
     case LEFT:
+      if (!isRowFocused()) {
+        return;
+      }
       changeExpanded(false) || moveByRow(-1, true);
       break;
     case RIGHT:
+      if (!isRowFocused()) {
+        return;
+      }
       changeExpanded(true) || moveByRow(1, true);
       break;
     case HOME:
+      if (!isRowFocused()) {
+        return;
+      }
       moveToExtreme(-1); break;
     case END:
+      if (!isRowFocused()) {
+        return;
+      }
       moveToExtreme(1); break;
     default:
       return;
