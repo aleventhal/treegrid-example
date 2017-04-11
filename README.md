@@ -61,7 +61,7 @@ We should look at nameFromContents in the ARIA spec, as well as the Firefox impl
 <tr>
 <th>Chomevox</th>
 <td>
-<li>Row nav: Does not read name unless role="treeitem" used instead of role="row"
+<li>Row nav: Previously did not read name, should be fixed in Canary, needs test
 <li>Cell nav: Does not read name on cells even if aria-label or aria-labelledby are set</td>
 <td></td>
 <td></td>
@@ -69,7 +69,7 @@ We should look at nameFromContents in the ARIA spec, as well as the Firefox impl
 </tr>
 <tr>
 <th>JAWS</th>
-<td>Does not read name unless treeitem, auto label options checked, as Chrome is not exposing name</td>
+<li>Row navigation: requires Chrome Canary otherwise won't ready name
 <td>
   <li>Row navigation: levels not reported
   <li>Column navigation: no issues found
@@ -81,7 +81,7 @@ We should look at nameFromContents in the ARIA spec, as well as the Firefox impl
 <tr>
 <th>NVDA</th>
 <td>
-  <li>Row navigation: Does not read name unless treeitem, auto label options checked, as Chrome is not exposing name
+  <li>Row navigation: requires Chrome Canary otherwise won't ready name
   <li>Column navigation: Does not read column headers
 </td>
 <td>
