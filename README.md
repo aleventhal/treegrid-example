@@ -69,7 +69,7 @@ We should look at nameFromContents in the ARIA spec, as well as the Firefox impl
 </tr>
 <tr>
 <th>JAWS</th>
-<li>Row navigation: requires Chrome Canary otherwise won't ready name
+<li>Row navigation: requires Chrome Canary otherwise won't ready name<br>Also, levels not reported
 <td>
   <li>Row navigation: levels not reported
   <li>Column navigation: no issues found
