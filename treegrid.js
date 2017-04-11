@@ -1,5 +1,5 @@
 // TODO put aria-readme everywhere
-function onReady(treegrid, moveByWordModifier) {
+function onReady(treegrid) {
   function isChecked(id) {
     return document.getElementById(id).checked;
   }
@@ -8,15 +8,11 @@ function onReady(treegrid, moveByWordModifier) {
     return isChecked('keepColAfterRowNav');
   }
 
-  function shouldResetToRowModeAfterBlur() {
-    return isChecked('resetToRowModeAfterBlur');
-  }
+  function initTabIndices() {
+    // Make sure focusable elements are not in the tab order
+    // They will be added back in for the active row
+    setTabIndexOfFocusableElems(treegrid, -1);
 
-  function shouldFocusFirstColumn() {
-    return isChecked('focusFirstColumn');
-  }
-
-  function addTabIndex() {
     // Add tabindex="0" to first row, "-1" to other rows
     // We will use the roving tabindex method since aria-activedescendant
     // does not work in IE
@@ -30,6 +26,21 @@ function onReady(treegrid, moveByWordModifier) {
   function getAllRows() {
     var nodeList = treegrid.querySelectorAll('tbody > tr');
     return Array.prototype.slice.call(nodeList);
+  }
+
+  function getFocusableElems(root) {
+    // textarea not supported as a cell widget as it's multiple lines
+    // and needs up/down keys
+    var nodeList = root.querySelectorAll('a,button,input,[tabindex]');
+    return Array.prototype.slice.call(nodeList);
+  }
+
+  function setTabIndexOfFocusableElems(root, tabIndex) {
+    var focusableElems = getFocusableElems(root);
+    var index = focusableElems.length;
+    while (index --) {
+      focusableElems[index].tabIndex = tabIndex;
+    }
   }
 
   function getAllNavigableRows() {
@@ -58,49 +69,51 @@ function onReady(treegrid, moveByWordModifier) {
   // Restore tabIndex to what it should be when focus switches from
   // one treegrid item to another
   function onFocusIn(event) {
-    var prevTreeGridFocus = onFocusIn.prevTreeGridFocus;
     var newTreeGridFocus =
       event.target !== window && treegrid.contains(event.target) && event.target;
 
-    if (!newTreeGridFocus) {
-      // Moved out of treegrid
-      if (prevTreeGridFocus && prevTreeGridFocus.localName === 'td' &&
-        shouldResetToRowModeAfterBlur()) {
-        // When focus leaves treegrid, reset focus mode back to rows
-        prevTreeGridFocus.removeAttribute('tabindex');
-        setTimeout(function() {
-          // Wait for a moment so that we don't end up back on row when
-          // trying to shift+tab out of grid
-          prevTreeGridFocus.parentElement.tabIndex = 0;
-        }, 0);
-      }
-      onFocusIn.prevTreeGridFocus = null;
-      return;
+    // The last row we considered
+    var oldCurrentRow = enableTabbingInActiveRowDescendants.tabbingRow;
+    if (oldCurrentRow) {
+      enableTabbingInActiveRowDescendants(false, oldCurrentRow);
     }
 
-    if (prevTreeGridFocus) {
+    if (newTreeGridFocus) {
       // Stayed in treegrid
-      if (prevTreeGridFocus.localName === 'td') {
-        // Cells are focusable via click, navigation is only via keystroke
-        prevTreeGridFocus.removeAttribute('tabindex');
+      if (oldCurrentRow) {
+        // There will be a different current row that will be
+        // the tabbable one
+        oldCurrentRow.tabIndex = -1;
       }
-      else if (prevTreeGridFocus.localName === 'tr') {
-        // Rows are focusable via click
-        prevTreeGridFocus.tabIndex = -1;
+
+      // The new row
+      var currentRow = getRowWithFocus();
+      if (currentRow) {
+        currentRow.tabIndex = 0;
+        // Items within current row are also tabbable
+        enableTabbingInActiveRowDescendants(true, currentRow);
       }
     }
-
-    // This is the new element to tab into within the container
-    // Waiting fixes bug with tabbing when screen readers active in IE
-    setTimeout(function() {
-      newTreeGridFocus.tabIndex = 0;
-    }, 0);
-
-    // In tree grid
-    onFocusIn.prevTreeGridFocus = newTreeGridFocus;
   }
 
-  function getCurrentRow() {
+  // Set whether interactive elements within a row are tabbable
+  function enableTabbingInActiveRowDescendants(isTabbingOn, row) {
+    if (row) {
+      setTabIndexOfFocusableElems(row, isTabbingOn ? 0 : -1);
+      if (isTabbingOn) {
+        enableTabbingInActiveRowDescendants.tabbingRow = row;
+      }
+      else {
+        if (enableTabbingInActiveRowDescendants.tabbingRow === row) {
+          enableTabbingInActiveRowDescendants.tabbingRow = null;
+        }
+      }
+    }
+  }
+
+  // The row with focus is the row that either has focus or an element
+  // inside of it has focus
+  function getRowWithFocus() {
     var possibleRow = document.activeElement;
     if (treegrid.contains(possibleRow)) {
       while (possibleRow !== treegrid) {
@@ -112,7 +125,7 @@ function onReady(treegrid, moveByWordModifier) {
     }
   }
 
-  function getCurrentColumn(currentRow) {
+  function getColWithFocus(currentRow) {
     if (currentRow) {
       var possibleCol = document.activeElement;
       if (currentRow.contains(possibleCol)) {
@@ -134,7 +147,7 @@ function onReady(treegrid, moveByWordModifier) {
   // If we also need to move down/up a level, requireLevelChange = true
   // When
   function moveByRow(direction, requireLevelChange) {
-    var currentRow = getCurrentRow();
+    var currentRow = getRowWithFocus();
     var requiredLevel = requireLevelChange && currentRow &&
       getLevel(currentRow) + direction;
     var rows = getAllNavigableRows();
@@ -154,60 +167,37 @@ function onReady(treegrid, moveByWordModifier) {
     while (requiredLevel && requiredLevel !== getLevel(rows[rowIndex]));
 
     if (!shouldKeepColAfterRowNav() ||
-      !switchRowAndColFocus(currentRow, rows[rowIndex])) {
+      !focusSameColInDifferentRow(currentRow, rows[rowIndex])) {
       focus(rows[rowIndex]);
     }
   }
 
-  function switchRowAndColFocus(fromRow, toRow) {
+  function focusSameColInDifferentRow(fromRow, toRow) {
 
-    var currentCol = getCurrentColumn(fromRow);
+    var currentCol = getColWithFocus(fromRow);
     if (!currentCol) {
       return;
     }
 
     var fromCols = getNavigableCols(fromRow);
     var currentColIndex = fromCols.indexOf(currentCol);
-    var firstFocusableColIndex = shouldFocusFirstColumn() ? 0 : 1;
 
-    if (currentColIndex < firstFocusableColIndex) {
+    if (currentColIndex < 0) {
       return;
     }
 
     var toCols = getNavigableCols(toRow);
-    focus(toCols[currentColIndex]);
+    // Focus the first focusable element inside the <td>
+    focus(toCols[currentColIndex].querySelector('[tabindex]'));
     return true;
   }
 
-  function moveByCol(direction) {
-    var currentRow = getCurrentRow();
-    if (!currentRow) {
-      return;
-    }
-    var cols = getNavigableCols(currentRow);
-    var numCols = cols.length;
-    var currentCol = getCurrentColumn(currentRow);
-    var currentColIndex = cols.indexOf(currentCol);
-    var newColIndex;
-    var firstFocusableColIndex = shouldFocusFirstColumn() ? 0 : 1;
-    // First alt/ctrl+right moves to first column
-    newColIndex = (currentCol || direction < 0) ? currentColIndex + direction :
-      firstFocusableColIndex;
-    // Moving past beginning focuses row
-    if (newColIndex < firstFocusableColIndex) {
-      focus(currentRow);
-      return;
-    }
-    newColIndex = restrictIndex(newColIndex, numCols);
-    focus(cols[newColIndex]);
-  }
-
   function moveToExtreme(direction) {
-    var currentRow = getCurrentRow();
+    var currentRow = getRowWithFocus();
     if (!currentRow) {
       return;
     }
-    var currentCol = getCurrentColumn(currentRow);
+    var currentCol = getColWithFocus(currentRow);
     if (currentCol) {
       moveToExtremeCol(direction, currentRow);
     }
@@ -221,12 +211,7 @@ function onReady(treegrid, moveByWordModifier) {
     // Move to first/last col
     var cols = getNavigableCols(currentRow);
     if (direction === -1) {
-      if (shouldFocusFirstColumn()) {
-        focus(cols[0]);
-      }
-      else {
-        focus(currentRow);
-      }
+      focus(cols[0]);
     }
     else {
       focus(cols[cols.length - 1]);
@@ -240,7 +225,7 @@ function onReady(treegrid, moveByWordModifier) {
   }
 
   function changeExpanded(doExpand) {
-    var currentRow = getCurrentRow();
+    var currentRow = getRowWithFocus();
     if (!currentRow) {
       return;
     }
@@ -278,32 +263,8 @@ function onReady(treegrid, moveByWordModifier) {
   }
 
   function onKeyDown(event) {
-    function isMoveByWordModifierPressed() {
-      // Be very strict about move-by-word keystroke detection as we don't
-      // want to prevent other commands in OS or screen reader
-      if (!event[moveByWordModifier]) {
-        return;
-      }
-      var numModifiersPressed = Boolean(event.ctrlKey) + Boolean(event.altKey);
-      return numModifiersPressed === 1; // No more than one modifer pressed
-    }
-
-    function isAltOrCtrlPressed() {
-      return event.ctrlKey || event.altKey;
-    }
-
-    function isUnusedModifierCombo() {
-      if (event.metaKey || event.shiftKey) {
-        return true; // We ignore these no matter what
-      }
-      if (event.keyCode === LEFT || event.keyCode === RIGHT) {
-        if (isAltOrCtrlPressed() && !isMoveByWordModifierPressed()) {
-          return true;
-        }
-      }
-      else if (isAltOrCtrlPressed()) {
-        return true;
-      }
+    function isModifierPressed() {
+      return event.ctrlKey || event.altKey || event.shiftKey || event.metaKey;
     }
 
     var UP = 38;
@@ -313,7 +274,7 @@ function onReady(treegrid, moveByWordModifier) {
     var HOME = 36;
     var END = 35;
 
-    if (isUnusedModifierCombo(event)) {
+    if (isModifierPressed(event)) {
       return;
     }
 
@@ -323,20 +284,10 @@ function onReady(treegrid, moveByWordModifier) {
     case UP:
       moveByRow(-1); break;
     case LEFT:
-      if (isMoveByWordModifierPressed()) {
-        moveByCol(-1);
-      }
-      else {
-        changeExpanded(false) || moveByRow(-1, true);
-      }
+      changeExpanded(false) || moveByRow(-1, true);
       break;
     case RIGHT:
-      if (isMoveByWordModifierPressed()) {
-        moveByCol(1);
-      }
-      else {
-        changeExpanded(true) || moveByRow(1, true);
-      }
+      changeExpanded(true) || moveByRow(1, true);
       break;
     case HOME:
       moveToExtreme(-1); break;
@@ -350,13 +301,12 @@ function onReady(treegrid, moveByWordModifier) {
     event.preventDefault();
   }
 
-  addTabIndex();
+  initTabIndices();
   treegrid.addEventListener('keydown', onKeyDown);
   window.addEventListener('focusin', onFocusIn);
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-  var isMac = navigator.platform.substr(0,3) === 'Mac';
-  onReady(document.getElementById('treegrid'), isMac ? 'altKey' : 'ctrlKey');
+  onReady(document.getElementById('treegrid'));
 });
 

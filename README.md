@@ -8,18 +8,19 @@ The ARIA treegrid has not gotten enough love. Docs the old specs provide recomme
 
 # Challenges
 
-The main challenge is that the left/right arrow key could be used to collapse/expand or to move by column. The few approaches out there take the approach that left/right should move by cell, but this takes the opposite approach. In this example, left/right collapse/expand, and move-by-word keys are used to move by cell.
+The main challenge is that the left/right arrow key could be used to collapse/expand or to move by column. The few approaches out there take the approach that left/right should move by cell, but this takes a more discoverable approach. In this example, left/right collapse/expand, and tab/shift+tab move between interactive cells in the current row.
 
 # Assumptions
 
 * Most treegrids don't have that many columns, and are more vertical than horizontal
 * Most users know how to navigate a tree
 * The most important navigation in a treegrid is by row, like in a normal tree
-* Navigation by cell is often more of a convenience than a necessity
+* Navigation by readonly cells is important for screen reader users -- can be implemented by screen reader (like Ctrl+Alt+Arrow in NVDA+Firefox)
+* Navigation by interactive cell is important for all users -- must be discoverable
 
 # Approach
-* By default, a user is in row navigation mode. We allow traversal of columns via the move-by-word keys.
-* Ideally, screen readers would automatically read from the currently focused cell to the end of the row. The benefit of this would be that the user could effectively always be in row mode, as the screen reader would end up reading the entire line when moving to the next row anyway. However, screen readers don't necessarily do this currently. Thus, the approach was taken that when the first column would have been active, we focus the entire row, to help the screen reader know to read the entire thing.
+* By default, a user is in row navigation mode. We allow traversal of interactive cells in the currently focused row via tab and shift+tab.
+* Ideally, screen readers would implement table navigation keys even in focus mode, launching from the current row or cell. NVDA does this in Firefox, at least recognizing the current row.
 
 # Keyboard specifics
 <table>
@@ -33,7 +34,7 @@ The main challenge is that the left/right arrow key could be used to collapse/ex
   <tr>
     <td>Up/down</td>
     <td>Move by row as in an ordinary tree. If focused on a cell, will move
-    to next cell</td>
+    to the same cell in the newly focused row</td>
   </tr>
   <tr>
     <td>Left/right</td>
